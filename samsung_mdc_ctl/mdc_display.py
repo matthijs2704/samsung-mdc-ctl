@@ -27,6 +27,20 @@ class MDCDisplay:
             return DisplayStatus(statusResponse.payload)
         raise UnhandledResponse()
 
+    def getPower(self) -> bool:
+        response = self.connection.send(Command.POWER)
+        pwrResponse = self._check_response(response)
+
+        if pwrResponse.rCmd == Command.POWER:
+            if pwrResponse.payload[0] == 1:
+                return True
+            return False
+        raise UnhandledResponse()
+
+    def setPower(self, power: bool) -> None:
+        muteResponse = self.connection.send(Command.POWER, [power])
+        self._check_response(muteResponse)
+
     def getMute(self) -> bool:
         response = self.connection.send(Command.MUTE)
         muteResponse = self._check_response(response)
