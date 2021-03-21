@@ -38,8 +38,8 @@ class MDCDisplay:
         raise UnhandledResponse()
 
     def setPower(self, power: bool) -> None:
-        muteResponse = self.connection.send(Command.POWER, [power])
-        self._check_response(muteResponse)
+        pwrResponse = self.connection.send(Command.POWER, [power])
+        self._check_response(pwrResponse)
 
     def getMute(self) -> bool:
         response = self.connection.send(Command.MUTE)
