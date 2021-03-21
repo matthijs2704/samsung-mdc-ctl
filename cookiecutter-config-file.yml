@@ -1,0 +1,10 @@
+# This file contains values from Cookiecutter
+
+default_context:
+  project_name: "samsung-mdc-ctl"
+  project_description: "Awesome `samsung-mdc-ctl` is a Python cli/package created with https://github.com/TezRomacH/python-package-template"
+  organization: "matthijs2704"
+  license: "MIT"
+  version: "0.1.0"
+  github_name: "matthijs2704"
+  email: "matthijs@logemann.dev"
