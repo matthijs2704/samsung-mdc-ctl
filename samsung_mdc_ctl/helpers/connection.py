@@ -1,17 +1,19 @@
+from typing import List
+
 import logging
 import socket
 import time
 
+import samsung_mdc_ctl.helpers.exceptions as exceptions
 from samsung_mdc_ctl import utils
-from samsung_mdc_ctl.helpers import exceptions
 from samsung_mdc_ctl.protocol.commands import Command
-from samsung_mdc_ctl.protocol.response import AckResponse, NakResponse
+from samsung_mdc_ctl.protocol.response import AckResponse, NakResponse, Response
 
 
 class MDCConnection:
     """Object for the connection to the screen"""
 
-    def __init__(self, config) -> None:
+    def __init__(self, config):
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         if config["timeout"]:
@@ -32,10 +34,10 @@ class MDCConnection:
         """Close the connection."""
         if self.connection:
             self.connection.close()
-            self.connection = None
+            # self.connection = None
             logging.debug("Connection closed.")
 
-    def send(self, cmd: Command, data=[]):
+    def send(self, cmd: Command, data: List[int] = []) -> Response:
         """Send a control command."""
         if not self.connection:
             raise exceptions.ConnectionClosed()
@@ -57,7 +59,7 @@ class MDCConnection:
         self.connection.send(packet)
         return self._read_response()
 
-    def _read_response(self, first_time=False):
+    def _read_response(self) -> Response:
         read_data = self.connection.recv(1024)
 
         if len(read_data) <= 2:
