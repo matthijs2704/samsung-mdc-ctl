@@ -46,24 +46,30 @@ class MDCDisplay:
         muteResponse = self._check_response(response)
 
         if muteResponse.rCmd == Command.MUTE:
-            if muteResponse.payload[0] == 1:
-                return True
-            return False
+            return bool(muteResponse.payload[0] == 1)
         raise UnhandledResponse()
 
     def setMute(self, mute: bool) -> None:
         muteResponse = self.connection.send(Command.MUTE, [mute])
         self._check_response(muteResponse)
 
-    def getVolume(self) -> bool:
+    def getVolume(self) -> int:
         response = self.connection.send(Command.VOLUME)
         volResponse = self._check_response(response)
 
         if volResponse.rCmd == Command.VOLUME:
-            return volResponse.payload[0]
+            return int(volResponse.payload[0])
         raise UnhandledResponse()
 
     def setVolume(self, volume: int) -> None:
         volume = max(0, min(volume, 100))
         volResponse = self.connection.send(Command.VOLUME, [volume])
         self._check_response(volResponse)
+
+    def getSWVersion(self) -> str:
+        response = self.connection.send(Command.GET_SW_VER)
+        swVerResponse = self._check_response(response)
+
+        if swVerResponse.rCmd == Command.GET_SW_VER:
+            return str(swVerResponse.payload.decode("utf-8"))
+        raise UnhandledResponse()

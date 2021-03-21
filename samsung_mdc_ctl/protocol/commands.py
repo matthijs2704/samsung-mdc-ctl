@@ -4,7 +4,7 @@ from enum import Enum
 class Command(Enum):
     STATUS = 0x00
     GET_SERIAL = 0x0B
-    GET_FW_VER = 0x0E
+    GET_SW_VER = 0x0E
     GET_MODEL = 0x10
     POWER = 0x11
     VOLUME = 0x12
