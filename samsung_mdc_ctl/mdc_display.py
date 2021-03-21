@@ -13,30 +13,32 @@ class MDCDisplay:
         self._deviceId = deviceId
         self.connection = MDCConnection(host=host, deviceId=deviceId)
 
+    def _check_response(self, response) -> None:
+        if isinstance(response, AckResponse):
+            pass
+        elif isinstance(response, NakResponse):
+            raise NakReceived(response.errCode)
+
     def getStatus(self) -> None:
         statusResponse = self.connection.send(Command.STATUS)
-        if isinstance(statusResponse, AckResponse):
-            if statusResponse.rCmd == Command.STATUS.value:
-                status = DisplayStatus(statusResponse.payload)
-                return status
-            raise UnhandledResponse()
-        elif isinstance(statusResponse, NakResponse):
-            raise NakReceived(statusResponse.errCode)
+        self._check_response(statusResponse)
+
+        if statusResponse.rCmd == Command.STATUS.value:
+            return DisplayStatus(statusResponse.payload)
+        raise UnhandledResponse()
 
     def getMute(self) -> bool:
         muteResponse = self.connection.send(Command.MUTE)
-        if isinstance(muteResponse, AckResponse):
-            if muteResponse.rCmd == Command.MUTE.value:
-                return muteResponse.payload[0] == 1
-            raise UnhandledResponse()
-        elif isinstance(muteResponse, NakResponse):
-            raise NakReceived(muteResponse.errCode)
+        self._check_response(muteResponse)
+
+        if muteResponse.rCmd == Command.MUTE.value:
+            return muteResponse.payload[0] == 1
+        raise UnhandledResponse()
 
     def setMute(self, mute: bool) -> None:
         muteResponse = self.connection.send(Command.MUTE, [mute])
-        if isinstance(muteResponse, AckResponse):
-            if muteResponse.rCmd == Command.MUTE.value:
-                return muteResponse.payload[0] == 1
-            raise UnhandledResponse()
-        elif isinstance(muteResponse, NakResponse):
-            raise NakReceived(muteResponse.errCode)
+        self._check_response(muteResponse)
+
+        if muteResponse.rCmd == Command.MUTE.value:
+            return muteResponse.payload[0] == 1
+        raise UnhandledResponse()
