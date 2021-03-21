@@ -23,7 +23,7 @@ class MDCDisplay:
         response = self.connection.send(Command.STATUS)
         statusResponse = self._check_response(response)
 
-        if statusResponse.rCmd == Command.STATUS.value:
+        if statusResponse.rCmd == Command.STATUS:
             return DisplayStatus(statusResponse.payload)
         raise UnhandledResponse()
 
@@ -31,7 +31,7 @@ class MDCDisplay:
         response = self.connection.send(Command.MUTE)
         muteResponse = self._check_response(response)
 
-        if muteResponse.rCmd == Command.MUTE.value:
+        if muteResponse.rCmd == Command.MUTE:
             if muteResponse.payload[0] == 1:
                 return True
             return False
