@@ -13,14 +13,13 @@ from samsung_mdc_ctl.protocol.response import AckResponse, NakResponse, Response
 class MDCConnection:
     """Object for the connection to the screen"""
 
-    def __init__(self, config):
+    def __init__(self, host: str, deviceId: int, timeout: int = 10):
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-        if config["timeout"]:
-            self.connection.settimeout(config["timeout"])
+        self.connection.settimeout(timeout)
 
-        self.connection.connect((config["host"], 1515))
-        self.deviceId = config["deviceId"] & 0xFF
+        self.connection.connect((host, 1515))
+        self.deviceId = deviceId & 0xFF
 
         # self._read_response(True)
 
