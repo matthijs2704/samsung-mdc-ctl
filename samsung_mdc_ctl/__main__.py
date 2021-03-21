@@ -11,6 +11,7 @@ from rich.console import Console
 from samsung_mdc_ctl import __version__
 from samsung_mdc_ctl.example import hello
 from samsung_mdc_ctl.helpers.connection import MDCConnection
+from samsung_mdc_ctl.mdc_display import MDCDisplay
 from samsung_mdc_ctl.protocol.commands import Command
 
 
@@ -66,8 +67,12 @@ def main(
 
     logging.basicConfig(encoding="utf-8", level=logging.DEBUG)
 
-    connection = MDCConnection(host="192.168.3.153", deviceId=1, timeout=10)
-    console.print(f"[bold magenta]Got connection to the Samsung display![/]")
-    print(connection.send(Command.STATUS))
-    print(connection.send(Command.MUTE, [0x0]))
-    connection.close()
+    display = MDCDisplay(host="192.168.3.153", deviceId=1)
+    print(display.connection.send(Command.GET_FW_VER).__dict__)
+    display.getMute()
+    display.setMute(False)
+    display.getStatus()
+    # console.print(f"[bold magenta]Got connection to the Samsung display![/]")
+    # print(connection.send(Command.STATUS))
+    # print(connection.send(Command.MUTE, [0x0]))
+    # connection.close()

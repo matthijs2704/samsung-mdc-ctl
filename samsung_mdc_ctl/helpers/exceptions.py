@@ -40,6 +40,12 @@ class InvalidResponseChecksum(Exception):
     pass
 
 
+class NakReceived(Exception):
+    """Nak received from the display"""
+
+    pass
+
+
 class UnknownMethod(Exception):
     """Unknown method."""
 

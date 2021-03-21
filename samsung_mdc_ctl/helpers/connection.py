@@ -41,18 +41,18 @@ class MDCConnection:
         if not self.connection:
             raise exceptions.ConnectionClosed()
 
-        print(f"command: {cmd}")
+        # print(f"command: {cmd}")
 
         payload = bytearray()
         payload.append(cmd.value)
         payload.append(self.deviceId)
         payload += self._serialize_data(data)
-        print(utils.byte_compute_checksum(payload))
+        # print(utils.byte_compute_checksum(payload))
 
         packet = bytearray([0xAA])
         packet += payload
         packet.append(utils.compute_checksum(payload))
-        print(packet)
+        # print(packet)
 
         logging.info("Sending control command: %s", cmd)
         self.connection.send(packet)
@@ -71,7 +71,7 @@ class MDCConnection:
             raise exceptions.InvalidResponse()
 
         checksum = read_data[-1]
-        computed_checksum = utils.compute_checksum(read_data[1:-2])
+        computed_checksum = utils.compute_checksum(read_data[1:-1])
         if checksum != computed_checksum:
             raise exceptions.InvalidResponseChecksum()
 
