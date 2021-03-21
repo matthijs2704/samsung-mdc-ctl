@@ -1,6 +1,8 @@
 # type: ignore[attr-defined]
 """Awesome `samsung-mdc-ctl` is a Python cli/package created with https://github.com/TezRomacH/python-package-template"""
 
+# from .remote import Remote
+
 try:
     from importlib.metadata import PackageNotFoundError, version
 except ImportError:  # pragma: no cover

@@ -2,6 +2,7 @@
 
 from typing import Optional
 
+import logging
 import random
 from enum import Enum
 
@@ -9,6 +10,8 @@ import typer
 from rich.console import Console
 from samsung_mdc_ctl import __version__
 from samsung_mdc_ctl.example import hello
+from samsung_mdc_ctl.helpers.connection import MDCConnection
+from samsung_mdc_ctl.protocol.commands import Command
 
 
 class Color(str, Enum):
@@ -58,9 +61,13 @@ def main(
     ),
 ):
     """Prints a greeting for a giving name."""
-    if color is None:
-        # If no color specified use random value from `Color` class
-        color = random.choice(list(Color.__members__.values()))
-
+    # logger.setLevel()
     greeting: str = hello(name)
-    console.print(f"[bold {color}]{greeting}[/]")
+    config = {"host": "192.168.3.153", "deviceId": 1, "timeout": 10}
+    logging.basicConfig(encoding="utf-8", level=logging.DEBUG)
+
+    connection = MDCConnection(config)
+    console.print(f"[bold magenta]Got connection to the Samsung display![/]")
+    print(connection.send(Command.STATUS))
+    print(connection.send(Command.MUTE, [0x0]))
+    connection.close()
