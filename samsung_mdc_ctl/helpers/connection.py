@@ -84,7 +84,7 @@ class MDCConnection:
         if len(payload) != dataLength:
             raise exceptions.NotEnoughData()
 
-        rCmd = payload[1]
+        rCmd = Command(payload[1])
 
         if payload[0] == ord("A"):
             return AckResponse(rCmd, payload[2:])

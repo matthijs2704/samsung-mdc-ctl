@@ -13,26 +13,28 @@ class MDCDisplay:
         self._deviceId = deviceId
         self.connection = MDCConnection(host=host, deviceId=deviceId)
 
-    def _check_response(self, response: Response) -> None:
+    def _check_response(self, response: Response) -> AckResponse:
         if isinstance(response, AckResponse):
-            pass
+            return response
         elif isinstance(response, NakResponse):
             raise NakReceived(response.errCode)
 
     def getStatus(self) -> DisplayStatus:
-        statusResponse = self.connection.send(Command.STATUS)
-        self._check_response(statusResponse)
+        response = self.connection.send(Command.STATUS)
+        statusResponse = self._check_response(response)
 
         if statusResponse.rCmd == Command.STATUS.value:
             return DisplayStatus(statusResponse.payload)
         raise UnhandledResponse()
 
     def getMute(self) -> bool:
-        muteResponse = self.connection.send(Command.MUTE)
-        self._check_response(muteResponse)
+        response = self.connection.send(Command.MUTE)
+        muteResponse = self._check_response(response)
 
         if muteResponse.rCmd == Command.MUTE.value:
-            return muteResponse.payload[0] == 1
+            if muteResponse.payload[0] == 1:
+                return True
+            return False
         raise UnhandledResponse()
 
     def setMute(self, mute: bool) -> None:
