@@ -4,7 +4,7 @@ from samsung_mdc_ctl.protocol.sources import InputSource
 class DisplayStatus:
     """ Representation of the display status message """
 
-    def __init__(self, payload) -> None:
+    def __init__(self, payload: bytes) -> None:
         self.power = payload[0] == 1
         self.volume = payload[1]
         self.mute = payload[2] == 1

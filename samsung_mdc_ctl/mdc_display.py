@@ -2,7 +2,7 @@ from samsung_mdc_ctl.helpers.connection import MDCConnection
 from samsung_mdc_ctl.helpers.exceptions import NakReceived, UnhandledResponse
 from samsung_mdc_ctl.helpers.status import DisplayStatus
 from samsung_mdc_ctl.protocol.commands import Command
-from samsung_mdc_ctl.protocol.response import AckResponse, NakResponse
+from samsung_mdc_ctl.protocol.response import AckResponse, NakResponse, Response
 
 
 class MDCDisplay:
@@ -13,13 +13,13 @@ class MDCDisplay:
         self._deviceId = deviceId
         self.connection = MDCConnection(host=host, deviceId=deviceId)
 
-    def _check_response(self, response) -> None:
+    def _check_response(self, response: Response) -> None:
         if isinstance(response, AckResponse):
             pass
         elif isinstance(response, NakResponse):
             raise NakReceived(response.errCode)
 
-    def getStatus(self) -> None:
+    def getStatus(self) -> DisplayStatus:
         statusResponse = self.connection.send(Command.STATUS)
         self._check_response(statusResponse)
 
@@ -38,7 +38,3 @@ class MDCDisplay:
     def setMute(self, mute: bool) -> None:
         muteResponse = self.connection.send(Command.MUTE, [mute])
         self._check_response(muteResponse)
-
-        if muteResponse.rCmd == Command.MUTE.value:
-            return muteResponse.payload[0] == 1
-        raise UnhandledResponse()
