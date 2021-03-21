@@ -63,10 +63,10 @@ def main(
     """Prints a greeting for a giving name."""
     # logger.setLevel()
     greeting: str = hello(name)
-    config = {"host": "192.168.3.153", "deviceId": 1, "timeout": 10}
+
     logging.basicConfig(encoding="utf-8", level=logging.DEBUG)
 
-    connection = MDCConnection(config)
+    connection = MDCConnection(host="192.168.3.153", deviceId=1, timeout=10)
     console.print(f"[bold magenta]Got connection to the Samsung display![/]")
     print(connection.send(Command.STATUS))
     print(connection.send(Command.MUTE, [0x0]))
