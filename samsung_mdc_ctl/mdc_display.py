@@ -54,3 +54,16 @@ class MDCDisplay:
     def setMute(self, mute: bool) -> None:
         muteResponse = self.connection.send(Command.MUTE, [mute])
         self._check_response(muteResponse)
+
+    def getVolume(self) -> bool:
+        response = self.connection.send(Command.VOLUME)
+        volResponse = self._check_response(response)
+
+        if volResponse.rCmd == Command.VOLUME:
+            return volResponse.payload[0]
+        raise UnhandledResponse()
+
+    def setVolume(self, volume: int) -> None:
+        volume = max(0, min(volume, 100))
+        volResponse = self.connection.send(Command.VOLUME, [volume])
+        self._check_response(volResponse)

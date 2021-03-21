@@ -69,10 +69,12 @@ def main(
 
     display = MDCDisplay(host="192.168.3.153", deviceId=1)
     print(display.connection.send(Command.GET_FW_VER).__dict__)
+    print(display.getStatus().__dict__)
     print(display.getPower())
     print(display.getMute())
+    print(display.getVolume())
     display.setMute(False)
-    display.getStatus()
+    display.setVolume(10)
     # console.print(f"[bold magenta]Got connection to the Samsung display![/]")
     # print(connection.send(Command.STATUS))
     # print(connection.send(Command.MUTE, [0x0]))
