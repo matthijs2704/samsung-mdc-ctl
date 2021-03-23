@@ -1,10 +1,13 @@
+import logging
+import time
+
 from samsung_mdc_ctl.helpers.connection import MDCConnection
 from samsung_mdc_ctl.helpers.display_status import DisplayStatus
 from samsung_mdc_ctl.helpers.exceptions import NakReceived, UnhandledResponse
 from samsung_mdc_ctl.helpers.model import DisplayModel
 from samsung_mdc_ctl.helpers.status import Status
-from samsung_mdc_ctl.power import DisplayPower
 from samsung_mdc_ctl.protocol.commands import Command
+from samsung_mdc_ctl.protocol.power import DisplayPower
 from samsung_mdc_ctl.protocol.response import AckResponse, NakResponse, Response
 from samsung_mdc_ctl.protocol.sources import InputSource
 from samsung_mdc_ctl.protocol.virtual_remote_keys import VirtualRemoteKey
@@ -78,6 +81,27 @@ class MDCDisplay:
     def setPower(self, power: DisplayPower) -> None:
         pwrResponse = self.connection.send(Command.POWER, [power.value])
         self._check_response(pwrResponse)
+        if power == DisplayPower.POWER_ON:
+            time.sleep(10)
+            logging.debug("Reconnecting after power on")
+            self.reconnect()
+            logging.debug("Reconnected after power on")
+
+    def reconnect(self):
+        self.connection.close()
+        reconnect_try_count = 3
+        for i in range(reconnect_try_count):
+            try:
+                self.connection = MDCConnection(
+                    host=self._host, deviceId=self._deviceId
+                )
+                return
+            except:
+                logging.info(
+                    f"Reconnection failed, retrying ({i+1}/{reconnect_try_count})"
+                )
+                time.sleep(1)
+        raise ConnectionRefusedError()
 
     ############## 2.1.12 Volume Control ##############
 

@@ -12,6 +12,7 @@ class Command(Enum):
     INPUT_SOURCE = 0x14
     CHANNEL_CONTROL = 0x17
     VIRTUAL_REMOTE = 0xB0
+    PIP_STATUS = 0x09
 
     GET_DISPLAY_STATUS = 0x0D
 

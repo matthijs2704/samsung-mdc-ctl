@@ -37,6 +37,10 @@ class MDCConnection:
             logging.debug("Connection closed.")
 
     def send(self, cmd: Command, data: List[int] = []) -> Response:
+        logging.info("Sending control command: %s", cmd)
+        return self.sendRaw(rawCmd=cmd.value, data=data)
+
+    def sendRaw(self, rawCmd: int, data: List[int] = []) -> Response:
         """Send a control command."""
         if not self.connection:
             raise exceptions.ConnectionClosed()
@@ -44,7 +48,7 @@ class MDCConnection:
         # print(f"command: {cmd}")
 
         payload = bytearray()
-        payload.append(cmd.value)
+        payload.append(rawCmd)
         payload.append(self.deviceId)
         payload += self._serialize_data(data)
         # print(utils.byte_compute_checksum(payload))
@@ -54,7 +58,7 @@ class MDCConnection:
         packet.append(utils.compute_checksum(payload))
         # print(packet)
 
-        logging.info("Sending control command: %s", cmd)
+        logging.info("Sending command: %s", packet)
         self.connection.send(packet)
         return self._read_response()
 

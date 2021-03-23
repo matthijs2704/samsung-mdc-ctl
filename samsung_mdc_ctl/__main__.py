@@ -4,6 +4,7 @@ from typing import Optional
 
 import logging
 import random
+import time
 from enum import Enum
 
 import typer
@@ -15,6 +16,7 @@ from samsung_mdc_ctl.helpers.exceptions import NakReceived
 from samsung_mdc_ctl.mdc_display import MDCDisplay
 from samsung_mdc_ctl.power import DisplayPower
 from samsung_mdc_ctl.protocol.commands import Command
+from samsung_mdc_ctl.protocol.sources import InputSource
 
 
 class Color(str, Enum):
@@ -80,9 +82,24 @@ def main(
     # display.setPower(DisplayPower.POWER_ON)
     # display.setVolume(10)
     try:
-        print(display.getInputSource())
+        print(display.getPower())
+        print(display.setPower(DisplayPower.POWER_OFF))
+        time.sleep(2)
+        print(display.getPower())
+        # time.sleep(10)
+        print(display.setPower(DisplayPower.POWER_ON))
+        print(display.getPower())
+        # resp = display.connection.send(cmd=Command.PIP_STATUS, data=[])
+        # print(f"Resp: %s" % resp)
+        # print(f"Resp Data: %s" % resp.__dict__)
     except NakReceived as e:
-        print(e.args)
+        print(f"NAK: %s" % e.args)
+
+    # try:
+    #     print(display.getInputSource())
+    #     print(display.setInputSource(InputSource.HDMI_1))
+    # except NakReceived as e:
+    #     print(e.args)
 
     # print(display.connection.send(Command.OUTDOOR_MODE, [0x81]).__dict__)
     # console.print(f"[bold magenta]Got connection to the Samsung display![/]")
