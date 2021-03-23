@@ -14,8 +14,8 @@ from samsung_mdc_ctl.example import hello
 from samsung_mdc_ctl.helpers.connection import MDCConnection
 from samsung_mdc_ctl.helpers.exceptions import NakReceived
 from samsung_mdc_ctl.mdc_display import MDCDisplay
-from samsung_mdc_ctl.power import DisplayPower
 from samsung_mdc_ctl.protocol.commands import Command
+from samsung_mdc_ctl.protocol.power import DisplayPower
 from samsung_mdc_ctl.protocol.sources import InputSource
 
 
