@@ -27,7 +27,7 @@ class MDCDisplay:
         elif isinstance(response, NakResponse):
             raise NakReceived(response.errCode)
 
-    def getStatus(self) -> DisplayStatus:
+    def getStatus(self) -> Status:
         response = self.connection.send(Command.STATUS)
         statusResponse = self._check_response(response)
 

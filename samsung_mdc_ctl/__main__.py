@@ -74,7 +74,7 @@ def main(
     display = MDCDisplay(host="192.168.3.153", deviceId=1)
     # print(display.getModelNumber().__dict__)
     # print(display.getSWVersion())
-    # print(display.getStatus().__dict__)
+    print(display.getStatus().__dict__)
     # print(display.getPower())
     # print(display.getMute())
     # print(display.getVolume())
