@@ -35,7 +35,7 @@ class InputSource(Enum):
     URL_LAUNCHER = 0x63
     IWB = 0x64
     WEB_BROWSER = 0x65
-    REMOTE_WORKSPACE = 0x65
+    REMOTE_WORKSPACE = 0x66
 
     ALL_SOURCES = [
         S_VIDEO,
