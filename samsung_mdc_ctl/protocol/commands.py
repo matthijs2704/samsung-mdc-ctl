@@ -11,6 +11,7 @@ class Command(Enum):
     MUTE = 0x13
     INPUT_SOURCE = 0x14
     CHANNEL_CONTROL = 0x17
+    VIRTUAL_REMOTE = 0xB0
 
     GET_DISPLAY_STATUS = 0x0D
 

@@ -7,6 +7,7 @@ from samsung_mdc_ctl.power import DisplayPower
 from samsung_mdc_ctl.protocol.commands import Command
 from samsung_mdc_ctl.protocol.response import AckResponse, NakResponse, Response
 from samsung_mdc_ctl.protocol.sources import InputSource
+from samsung_mdc_ctl.protocol.virtual_remote_keys import VirtualRemoteKey
 
 
 class MDCDisplay:
@@ -122,3 +123,11 @@ class MDCDisplay:
             Command.INPUT_SOURCE, [src.value]
         )
         self._check_response(changeInputSourceResponse)
+
+    ############## 2.1.B0 Virtual Remote Control ##############
+
+    def sendRemoteKey(self, key: VirtualRemoteKey) -> None:
+        sendRemoteKeyResponse = self.connection.send(
+            Command.VIRTUAL_REMOTE, [key.value]
+        )
+        self._check_response(sendRemoteKeyResponse)

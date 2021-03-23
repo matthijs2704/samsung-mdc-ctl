@@ -11,7 +11,9 @@ from rich.console import Console
 from samsung_mdc_ctl import __version__
 from samsung_mdc_ctl.example import hello
 from samsung_mdc_ctl.helpers.connection import MDCConnection
+from samsung_mdc_ctl.helpers.exceptions import NakReceived
 from samsung_mdc_ctl.mdc_display import MDCDisplay
+from samsung_mdc_ctl.power import DisplayPower
 from samsung_mdc_ctl.protocol.commands import Command
 
 
@@ -75,8 +77,12 @@ def main(
     # print(display.getMute())
     # print(display.getVolume())
     # display.setMute(False)
+    # display.setPower(DisplayPower.POWER_ON)
     # display.setVolume(10)
-    print(display.getInputSource())
+    try:
+        print(display.getInputSource())
+    except NakReceived as e:
+        print(e.args)
 
     # print(display.connection.send(Command.OUTDOOR_MODE, [0x81]).__dict__)
     # console.print(f"[bold magenta]Got connection to the Samsung display![/]")
